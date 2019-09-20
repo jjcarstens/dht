@@ -18,3 +18,17 @@ To attempt to trigger and read, run:
 DHT.refresh # this triggers sensor to start sending data
 DHT.read # shows the data captured from the last trigger attempt
 ```
+
+This experiment is testing with `circuits_gpio` and `pigpiox`. You can switch between the two:
+```elixir
+# circuits_gpio by default. But you can also specify
+DHT.start_link(17, :circuits_gpio)
+
+# For pigpio
+DHT.start_link(17, :pigpiox)
+```
+
+You can use the included `weather_man` nerves app to quickly build firmware
+```elixir
+$ cd weather_man && mix firmware
+```
