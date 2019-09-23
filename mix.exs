@@ -6,6 +6,10 @@ defmodule Dht.MixProject do
       app: :dht,
       version: "0.1.0",
       elixir: "~> 1.9",
+      compilers: [:elixir_make | Mix.compilers()],
+      make_clean: ["clean"],
+      make_targets: ["all"],
+      build_embedded: true,
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
