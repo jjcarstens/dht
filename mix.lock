@@ -1,5 +1,5 @@
 %{
-  "circuits_gpio": {:hex, :circuits_gpio, "0.4.2", "becda6b468271a2dea0c8a500b23b2b5d425501a7d7664c55f96e292af8aef30", [:make, :mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
-  "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm"},
+  "circuits_gpio": {:hex, :circuits_gpio, "0.4.2", "becda6b468271a2dea0c8a500b23b2b5d425501a7d7664c55f96e292af8aef30", [:make, :mix], [{:elixir_make, "~> 0.6", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm", "d30787fd140bd09c6bd7fad8f3e7da6a1fa475eb3a6aff5f0c267c6f98cfcd47"},
+  "elixir_make": {:hex, :elixir_make, "0.6.0", "38349f3e29aff4864352084fc736fa7fa0f2995a819a737554f7ebd28b85aaab", [:mix], [], "hexpm", "d522695b93b7f0b4c0fcb2dfe73a6b905b1c301226a5a55cb42e5b14d509e050"},
   "pigpiox": {:hex, :pigpiox, "0.1.2", "efbd55fb4b4507aaf44193cf6bf5fbdff288a351bdfed3f31bdc9377ee5623fd", [:mix], [], "hexpm"},
 }
