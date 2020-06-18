@@ -17,7 +17,12 @@ defmodule Dht.MixProject do
       deps: deps(),
       description: description(),
       docs: docs(),
-      package: package()
+      package: package(),
+      preferred_cli_env: %{
+        docs: :docs,
+        "hex.build": :docs,
+        "hex.publish": :docs
+      }
     ]
   end
 
@@ -30,19 +35,21 @@ defmodule Dht.MixProject do
 
   defp deps do
     [
+      {:ex_doc, "~> 0.22", only: :docs},
       {:circuits_gpio, "~> 0.4"},
-      {:elixir_make, "~> 0.6"}
+      {:elixir_make, "~> 0.6"},
+      # {:telemetry_poller, "~> 0.5"},
+      # TODO: remove this once https://github.com/beam-telemetry/telemetry_poller/pull/47 merged
+      {:telemetry_poller, github: "jjcarstens/telemetry_poller"}
     ]
   end
 
   defp description() do
-    "Drive of DHT 11 and DHT 22 (temperature and humidity sensor)"
+    "Driver for DHT 11, DHT 22, and AM2302 temperature/humidity sensors"
   end
 
   defp docs do
     [
-      extras: ["README.md"],
-      main: "readme",
       source_ref: "v#{@version}",
       source_url: @source_url
     ]

@@ -12,6 +12,7 @@ defmodule DHT.Telemetry do
       period: :timer.seconds(period),
       name: via_name(pin, sensor)
     ]
+
     spec = :telemetry_poller.child_spec(opts)
 
     DynamicSupervisor.start_child(__MODULE__, spec)
@@ -37,6 +38,7 @@ defmodule DHT.Telemetry do
     case DHT.read(pin, sensor) do
       {:ok, reading} ->
         :telemetry.execute([:dht, :read], reading, meta)
+
       {:error, err} ->
         :telemetry.execute([:dht, :failure], %{error: err}, meta)
     end
