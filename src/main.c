@@ -118,7 +118,7 @@ static void handle_request(const char *req, void *cookie)
         if (ei_decode_long(req, &req_index, &sensor) < 0)
             errx(EXIT_FAILURE, "invalid sensor");
 
-        debug("Reading DHT%li on pin %li", sensor, pin);
+        // debug("Reading DHT%li on pin %li", sensor, pin);
 
         float humidity = 0, temperature = 0;
         int result = read_sensor(sensor, pin, &humidity, &temperature);
