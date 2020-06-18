@@ -1,8 +1,8 @@
 defmodule DHT do
   @moduledoc File.read!("README.md")
-  |> String.split(~r/<!-- .*DOC !-->/)
-  |> Enum.drop(1)
-  |> Enum.join("\n")
+             |> String.split(~r/<!-- .*DOC !-->/)
+             |> Enum.drop(1)
+             |> Enum.join("\n")
 
   @type period :: non_neg_integer()
   @type pin :: non_neg_integer()
@@ -11,30 +11,39 @@ defmodule DHT do
 
   @doc ~s(
     Start polling of readings at specified period intervals that are delivered as telemtry events
-    #{File.read!("README.md")
-    |> String.split(~r/<!-- POLLDOC !-->/)
-    |> Enum.drop(1)
-  |> hd()}
+    #{
+         File.read!("README.md")
+         |> String.split(~r/<!-- POLLDOC !-->/)
+         |> Enum.drop(1)
+         |> hd()
+       }
   )
-  @spec start_polling(pin(), sensor(), period()) :: DynamicSupervisor.on_start_child() | {:error, %ArgumentError{}}
+  @spec start_polling(pin(), sensor(), period()) ::
+          DynamicSupervisor.on_start_child() | {:error, %ArgumentError{}}
   def start_polling(pin, sensor, period \\ 2)
+
   def start_polling(pin, sensor, period) when is_integer(period) and period >= 2 do
     case sanitize_args(pin, sensor) do
       {:ok, pin, sensor} ->
         DHT.Telemetry.start_polling(pin, sensor, period)
-      err -> err
+
+      err ->
+        err
     end
   end
+
   def start_polling(_pin, _sensor, _period) do
     {:error, %ArgumentError{message: "time period must be >= 2 seconds"}}
   end
 
   @doc ~s(
   Take a reading on the specified pin for a sensor type
-  #{File.read!("README.md")
-  |> String.split("<!-- READDOC !-->")
-  |> Enum.drop(1)
-|> hd()}
+  #{
+         File.read!("README.md")
+         |> String.split("<!-- READDOC !-->")
+         |> Enum.drop(1)
+         |> hd()
+       }
   )
   @spec read(pin(), sensor()) :: {:ok, reading} | {:error, %ArgumentError{}} | {:error, integer()}
   def read(pin, sensor) do
@@ -54,8 +63,7 @@ defmodule DHT do
 
   defp sanitize_args(pin, sensor) do
     with {:ok, pin} <- sanitize_pin(pin),
-    {:ok, sensor} <- sanitize_sensor(sensor)
-    do
+         {:ok, sensor} <- sanitize_sensor(sensor) do
       {:ok, pin, sensor}
     else
       {:error, msg} -> {:error, %ArgumentError{message: msg}}
@@ -65,10 +73,11 @@ defmodule DHT do
   defp sanitize_pin(pin) when is_integer(pin), do: {:ok, pin}
   defp sanitize_pin(pin), do: {:error, "invalid pin: #{inspect(pin)}"}
 
-  @supported_sensors Enum.reduce([{:dht11, 11}, {:dht22, 22}, {:am2302, 22}], [], fn {k, v}, acc ->
-    [{to_string(k), v}, {to_string(v), v} | acc]
-  end)
-  |> Map.new()
+  @supported_sensors Enum.reduce([{:dht11, 11}, {:dht22, 22}, {:am2302, 22}], [], fn {k, v},
+                                                                                     acc ->
+                       [{to_string(k), v}, {to_string(v), v} | acc]
+                     end)
+                     |> Map.new()
 
   defp sanitize_sensor(sensor) do
     cleansed = String.downcase(to_string(sensor))
