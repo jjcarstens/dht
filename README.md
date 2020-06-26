@@ -1,6 +1,6 @@
 # DHT
 
-"Driver for DHT 11, DHT 22, and AM2302 temperature/humidity sensors"
+Driver for DHT 11, DHT 22, and AM2302 temperature/humidity sensors
 
 # Installation
 

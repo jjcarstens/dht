@@ -35,12 +35,10 @@ defmodule Dht.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.22", only: :docs},
+      {:ex_doc, github: "elixir-lang/ex_doc", only: :docs},
       {:circuits_gpio, "~> 0.4"},
       {:elixir_make, "~> 0.6"},
-      # {:telemetry_poller, "~> 0.5"},
-      # TODO: remove this once https://github.com/beam-telemetry/telemetry_poller/pull/47 merged
-      {:telemetry_poller, github: "jjcarstens/telemetry_poller"}
+      {:telemetry_poller, "~> 0.5"}
     ]
   end
 
@@ -50,17 +48,28 @@ defmodule Dht.MixProject do
 
   defp docs do
     [
+      extras: ["README.md", "CHANGELOG.md"],
+      main: "readme",
       source_ref: "v#{@version}",
-      source_url: @source_url
+      source_url: @source_url,
+      skip_undefined_reference_warnings_on: ["CHANGELOG.md"]
     ]
   end
 
   defp package() do
     [
-      name: "nerves_dht",
+      name: "dht",
       files: ["src", "lib", "mix.exs", "README.md", "LICENSE", "Makefile"],
-      licenses: ["GNU 3.0"],
-      links: %{"GitHub" => @source_url}
+      licenses: ["Apache-2.0"],
+      links: %{
+        "GitHub" => @source_url,
+        "Adafruit DHT22/AM2302 Datasheet" =>
+          "https://cdn-shop.adafruit.com/datasheets/Digital+humidity+and+temperature+sensor+AM2302.pdf",
+        "SparkFun DHT22 Datasheet" =>
+          "https://www.sparkfun.com/datasheets/Sensors/Temperature/DHT22.pdf",
+        "Mouser DHT11 Datasheet" =>
+          "https://www.mouser.com/datasheet/2/758/DHT11-Technical-Data-Sheet-Translated-Version-1143054.pdf"
+      }
     ]
   end
 end
