@@ -47,8 +47,17 @@ SRC += src/pi_2_dht_read.c src/pi_2_mmio.c src/common_dht_read.c
 else ifneq ($(filter $(MIX_TARGET),$(BBB)),)
 TARGET=3
 SRC += $(wildcard src/bbb*.c) src/common_dht_read.c
-else ifeq ($(MIX_TARGET), host)
+endif
+
+ifeq ($(MIX_TARGET), host)
+ifneq ($(findstring Raspberry,$(shell cat /proc/device-tree/model)),)
+$(info Detected Raspbian OS. Compiling for Raspberry Pi)
+TARGET=2
+SRC += src/pi_2_dht_read.c src/pi_2_mmio.c src/common_dht_read.c
+else
+$(info Target does not seem to have GPIO. Mocking out behavior for host)
 TARGET=0
+endif
 CC = gcc
 endif
 

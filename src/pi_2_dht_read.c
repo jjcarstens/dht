@@ -113,7 +113,7 @@ int pi_2_dht_read(int type, int pin, float *humidity, float *temperature)
 
     // Compute the average low pulse width to use as a 50 microsecond reference threshold.
     // Ignore the first two readings because they are a constant 80 microsecond pulse.
-    uint32_t threshold = 0;
+    int threshold = 0;
     for (int i = 2; i < DHT_PULSES * 2; i += 2) {
         threshold += pulseCounts[i];
     }
