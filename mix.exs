@@ -35,9 +35,9 @@ defmodule Dht.MixProject do
 
   defp deps do
     [
-      {:ex_doc, github: "elixir-lang/ex_doc", only: :docs},
-      {:circuits_gpio, "~> 0.4"},
-      {:elixir_make, "~> 0.6"},
+      {:ex_doc, "~> 0.23", only: :docs},
+      # {:circuits_gpio, "~> 0.4"},
+      {:elixir_make, "~> 0.6", runtime: false},
       {:telemetry_poller, "~> 0.5"}
     ]
   end
