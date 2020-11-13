@@ -24,13 +24,6 @@
 #define TARGET HOST
 #endif
 
-static int host_read(long sensor, long pin, float *humidity, float *temperature)
-{
-    *humidity = (float)rand() / (float)(RAND_MAX / 50);
-    *temperature = (float)rand() / (float)(RAND_MAX / 30);
-    return DHT_SUCCESS;
-}
-
 #if TARGET == RPI
 #include "pi_dht_read.h"
 #define read_sensor(...) pi_dht_read(__VA_ARGS__);
@@ -41,6 +34,7 @@ static int host_read(long sensor, long pin, float *humidity, float *temperature)
 #include "bbb_dht_read.h"
 #define read_sensor(...) bbb_dht_read(__VA_ARGS__);
 #else
+#include "mock.h"
 #define read_sensor(...) host_read(__VA_ARGS__);
 #endif
 
@@ -69,23 +63,6 @@ static void decode_request(const char *req, int *req_index, char *cmd, erlang_pi
     if (ei_decode_ref(req, req_index, ref) < 0)
         errx(EXIT_FAILURE, "invalid from reference");
 }
-
-// static int read_sensor(long sensor, long pin, float *humidity, float *temperature)
-// {
-//   switch (TARGET) {
-//   case HOST:
-//     humidity = (float) rand()/(float)(RAND_MAX/50);
-//     temperature = (float) rand()/(float)(RAND_MAX/30);
-//     return DHT_SUCCESS;
-//   case RPI:
-//     return pi_dht_read(sensor, pin, humidity, temperature);
-//   case RPI2:
-//     return pi_2_dht_read(sensor, pin, humidity, temperature);
-//   case BBBB:
-//     return bbb_dht_read(sensor, pin, &humidity, &temperature);
-//   }
-// }
-
 
 static void handle_request(const char *req, void *cookie)
 {
