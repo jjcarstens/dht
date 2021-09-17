@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.2 - 2021-09-16
+### Fixes
+* Port would crash when trying to read a `[:alias| #Reference<>]` from
+  tag produced by a GenServer call
+
 ## v0.1.1
 
 * Enhancements
