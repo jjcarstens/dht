@@ -38,8 +38,8 @@
 #define read_sensor(...) host_read(__VA_ARGS__);
 #endif
 
-static void decode_request(const char *req, int *req_index, char *cmd, erlang_pid *pid,
-                           erlang_ref *ref)
+static void decode_request_cmd_and_from(const char *req, int *req_index, char *cmd,
+                                        const char **from, int *from_len)
 {
     if (ei_decode_version(req, req_index, NULL) < 0)
         errx(EXIT_FAILURE, "Message version issue?");
@@ -52,26 +52,25 @@ static void decode_request(const char *req, int *req_index, char *cmd, erlang_pi
     if (ei_decode_atom(req, req_index, cmd) < 0)
         errx(EXIT_FAILURE, "expecting command atom");
 
-    int from_arity;
-    if (ei_decode_tuple_header(req, req_index, &from_arity) < 0 ||
-            from_arity != 2)
-        errx(EXIT_FAILURE, "expecting a from tuple of {pid, ref}");
+    // Pull out the from tag so it can be returned for
+    // the caller to use for replying
+    int from_start_index = *req_index;
+    *from = req + from_start_index;
 
-    if (ei_decode_pid(req, req_index, pid) < 0)
-        errx(EXIT_FAILURE, "invalid from pid");
+    if (ei_skip_term(req, req_index) < 0)
+        errx(EXIT_FAILURE, "failed to mark the from tag");
 
-    if (ei_decode_ref(req, req_index, ref) < 0)
-        errx(EXIT_FAILURE, "invalid from reference");
+    *from_len = *req_index - from_start_index;
 }
 
 static void handle_request(const char *req, void *cookie)
 {
     int req_index = sizeof(uint16_t);
     char cmd[MAXATOMLEN];
-    erlang_pid pid;
-    erlang_ref ref;
+    const char *from;
+    int from_len;
 
-    decode_request(req, &req_index, cmd, &pid, &ref);
+    decode_request_cmd_and_from(req, &req_index, cmd, &from, &from_len);
 
     ei_x_buff response;
     ei_x_new(&response);
@@ -119,9 +118,8 @@ static void handle_request(const char *req, void *cookie)
         ei_x_encode_atom(&response, "unknown_command");
     }
 
-    ei_x_encode_tuple_header(&response, 2);
-    ei_x_encode_pid(&response, &pid);
-    ei_x_encode_ref(&response, &ref);
+    // Add the from tag back for the caller to reply to
+    ei_x_append_buf(&response, from, from_len);
 
     erlcmd_send(response.buff, response.index);
     ei_x_free(&response);
