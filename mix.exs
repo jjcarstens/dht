@@ -38,7 +38,7 @@ defmodule Dht.MixProject do
       {:ex_doc, "~> 0.23", only: :docs},
       # {:circuits_gpio, "~> 0.4"},
       {:elixir_make, "~> 0.6", runtime: false},
-      {:telemetry_poller, "~> 0.5"}
+      {:telemetry_poller, "~> 1.0"}
     ]
   end
 
